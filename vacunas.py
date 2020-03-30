@@ -17,21 +17,24 @@ mysql.connect_args["cursorclass"] = pymysql.cursors.DictCursor #Transforma las t
 
 
 @app.route('/')#Pagina inicio donde estan listados los pacientes
-def pacientes():
-	cursor = mysql.get_db().cursor()
-	cursor.execute("SELECT * FROM paciente") #Muestra los pacientes desde la BD
-	paciente_=cursor.fetchall()
-	return render_template("plantilla.html", pacientes=paciente_)
+def inicio():
+	#dejar esta pagina como el menú inicial
 	#en la plantilla leo los datos 
+	return render_template("index.html")
 
-'''
-@app.route('/vacunas') #Listado de vacunas
-def vacunas():
+
+@app.route('/addVacuna') #Listado de vacunas
+def vacunarPaciente():
 	cursor = mysql.get_db().cursor()
 	cursor.execute("SELECT * FROM paciente") #Muestra los pacientes desde la BD
-	paciente_=cursor.fetchall()
-	return render_template("plantilla.html", pacientes=paciente_)
-'''
+	paciente=cursor.fetchall()
+	cursor_vacuna = mysql.get_db().cursor()
+	
+	cursor_vacuna.execute("SELECT * FROM vacuna") #Muestra los pacientes desde la BD
+	vacuna=cursor_vacuna.fetchall()
+
+	return render_template("addVacuna.html",pacientes=paciente,vacunas=vacuna)
+
 if __name__ == "__main__":
 	app.run(debug=True)
 
