@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Agregar Vacuna</title>
+            <!-- #JS -->
+    <!-- <script src="https://code.highcharts.com/highcharts.js"></script>  -->
+
+    <script type="text/javascript" src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/jquery-3.4.1.min.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/bootstrap.js')}}"></script>
+            <!-- #CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+   {% include "menu.html" ignore missing %}
+
+</head>
+<body>
+  <form action="{{url_for('addVacuna')}}" method="POST">
+      <div class="container-fluid"> <!-- 1-->
+      <fieldset>
+           <div  class="col-sm-12 my-auto"  style="width: 60%; margin:0 auto;"> <!-- 2-->
+                    <div class="card"> <!-- 3-->
+                        <div class="card-header">
+                            
+                        </div>
+                        <div class="card-body">
+                         	{{e}}
+                        </div>
+                          
+          </div> <!-- 3-->
+
+            
+                
+     </div> <!-- 2-->
+    </div> <!-- 1-->
+    </fieldset>
+</form>
+</body>
+
+</html>
