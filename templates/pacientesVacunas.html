@@ -27,17 +27,19 @@
       <fieldset>
            <div  class="col-sm-12 my-auto"  style="width: 60%; margin:0 auto;"> <!-- 2-->
                     <div class="card"> <!-- 3-->
+
+                    	{% for paciente in pacientes%}
                         <div class="card-header">
-                            Listado Pacientes
+                            Vacunas registradas al paciente {{paciente['NOMBRE']}}
                         </div>
+                        {% endfor %}
                         <div class="card-body">
                             <table class="blueTable">
                                 <thead>
                                   <tr>
-                                    <th id="NOMBRE_PACIENTE" name="NOMBRE_PACIENTE" >Nombre</th>
-                                    <th id="RUT_PACIENTE" name="RUT_PACIENTE">Rut</th>
-                                    <th id="FECHA_NACIMIENTO" name="FECHA_NACIMIENTO">Fecha Nacimiento</th>
-                                    <th>Vacunas</th>
+
+                                    <th id="NOMBRE_ENFERMEDAD" name="NOMBRE_ENFERMEDAD" >Vacuna</th>
+                                    <th id="FECHA_VACUNACION" name="FECHA_VACUNACION">Fecha</th>
                                   </tr>
                                 </thead>
 
@@ -50,18 +52,10 @@
                                   </tfoot>
                                 <tbody>
                                 
-                                  {% for paciente in pacientes %}  
+                                  {% for vacuna in vacunas %}  
                                   <tr>     
-                                    <td >{{paciente['RUT']}}</td>
-                                    <td>{{ paciente['NOMBRE']}}</td>
-                                    <td>{{ paciente['FECHA_NACIMIENTO']}}</td>
-                                    <td>
-                                       <div class="btn-group" role="group" aria-label="Basic example">   
-                                           <input  type="text" value="{{paciente['RUT']}}" id="rut" name="rut" style="display: none" readonly>
-                                          <button class="btn btn-primary" type="submit" >Agregar</button>
-                                           <button class="btn btn-primary" type="button" onclick="window.location.href='{{ url_for( 'pacientesVacunas' , rut=paciente['RUT'] )}}';">Ver</button>
-                                       </div>
-                                    </td>
+                                    <td >{{vacuna['NOMBRE_ENFERMEDAD']}}</td>
+                                    <td>{{ vacuna['FECHA_VACUNACION']}}</td>
                                   </tr>
                                   {% endfor %}
                                 </tbody>
@@ -79,4 +73,9 @@
 </form>
 </body>
 
+<!--
+
+        $("#form").attr('action',"{{ url_for('pacientesVacunas') }}");
+         alert( "Handler for .click() called." );
+    -->
 </html>
