@@ -92,6 +92,19 @@ def vacunas():
 
 
 
+@app.route('/pacientesPorVacunas',methods=["POST","GET"])#Listado pacientes por vacunas
+def pacientesPorVacunas():
+	if request.method=="POST":	
+		id_vacuna=request.form['NOMBRE_ENFERMEDAD']
+		cursor = mysql.get_db().cursor()
+		sql="SELECT P.NOMBRE, P.RUT, PV.FECHA_VACUNACION FROM PACIENTE_RECIBE_VACUNA PV, PACIENTE P, VACUNA V " 
+		sql+="WHERE PV.RUT=P.RUT "
+		sql+="AND PV.NOMBRE_ENFERMEDAD=V.NOMBRE_ENFERMEDAD AND PV.NOMBRE_ENFERMEDAD= %s"
+		cursor.execute(sql,id_vacuna) #Muestra las vacunas desde la BD
+		vacunados=cursor.fetchall()
+
+		return render_template("pacientesPorVacunas.html", vacunados=vacunados,vacuna=id_vacuna)
+
 
 
 if __name__ == "__main__":
