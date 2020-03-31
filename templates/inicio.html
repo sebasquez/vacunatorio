@@ -55,14 +55,18 @@ INGENIERÍA CIVIL EN INFORMÁTICA UBB 2020
                                 
                                   {% for paciente in pacientes %}  
                                   <tr>     
-                                    <td >{{paciente['RUT']}}</td>
                                     <td>{{ paciente['NOMBRE']}}</td>
+                                    <td >{{paciente['RUT']}}</td>
                                     <td>{{ paciente['FECHA_NACIMIENTO']}}</td>
                                     <td>
-                                       <div class="btn-group" role="group" aria-label="Basic example">   
-                                          <button class="btn btn-primary" value="{{paciente['RUT']}}" id="rut" name="rut"  type="submit" >Agregar</button>
 
-                                           <button class="btn btn-primary" type="button" onclick="window.location.href='{{ url_for( 'pacientesVacunas' , rut=paciente['RUT'] )}}';">Ver</button>
+                                       <div class="btn-group row" style="width: 100%">
+                                          <div class="col-sm-8">
+                                            <button class="btn btn-outline-primary btn-block" value="{{paciente['RUT']}}" id="rut" name="rut"  type="submit" >Agregar</button>
+                                          </div>
+                                           <div class="col-sm-4">
+                                            <button  class="btn btn-outline-success" type="button" onclick="window.location.href='{{ url_for( 'pacientesVacunas' , rut=paciente['RUT'] )}}';">Ver</button>
+                                          </div>
                                        </div>
                                     </td>
                                   </tr>
