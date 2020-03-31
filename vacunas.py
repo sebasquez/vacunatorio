@@ -1,3 +1,6 @@
+#INTEGRANTES: NATALIA SEPÚLVEDA - NELSON VÁSQUEZ
+#INGENIERÍA CIVIL EN INFORMÁTICA UBB 2020
+
 import requests
 import json
 import times
