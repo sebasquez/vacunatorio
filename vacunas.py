@@ -19,8 +19,6 @@ mysql.connect_args["cursorclass"] = pymysql.cursors.DictCursor #Transforma las t
 
 @app.route('/')#Pagina inicio donde estan listados los pacientes
 def inicio():
-	#dejar esta pagina como el menú inicial
-	#en la plantilla leo los datos 
 	cursor = mysql.get_db().cursor()
 	cursor.execute("SELECT * FROM paciente") #Muestra los pacientes desde la BD
 	paciente=cursor.fetchall()
@@ -33,22 +31,14 @@ def addVacuna():
 	cursor_paciente = mysql.get_db().cursor()
 	sql="SELECT * FROM paciente WHERE RUT = %s"
 	cursor_paciente.execute(sql,rut)
-	paciente=cursor_paciente.fetchall()		
+	paciente=cursor_paciente.fetchall()	
+
 	cursor_vacuna = mysql.get_db().cursor()
 	cursor_vacuna.execute("SELECT * FROM vacuna") #Muestra los pacientes desde la BD
 	vacuna=cursor_vacuna.fetchall()
-	'''
-	if 	request.form['ver']=='1':
-		cursor_vacunado = mysql.get_db().cursor()
-		sql_vacunado="SELECT * FROM PACIENTE_RECIBE_VACUNA WHERE RUT= %s"
-		cursor_vacunado.execute(sql_vacunado,rut) #Muestra los pacientes desde la BD
-		vacunado=cursor_vacunado.fetchall()
-		return render_template('pacientesVacunas.html',pacientes=paciente,vacunados=vacunado)
-	else:
-	'''
 	return render_template("addVacuna.html",pacientes=paciente,vacunas=vacuna)
 	
-	
+
 
 @app.route('/addDatosVacuna', methods=['POST']) #Listado de vacunas
 def addDatosVacuna():
@@ -88,6 +78,19 @@ def pacientesVacunas():
 
 
 		return render_template('pacientesVacunas.html',pacientes=paciente,vacunas=vacunas)
+
+
+
+
+
+@app.route('/vacunas',methods=["POST","GET"])#Listado de las vacunas existentes
+def vacunas():
+	cursor = mysql.get_db().cursor()
+	cursor.execute("SELECT * FROM vacuna") #Muestra las vacunas desde la BD
+	vacunas=cursor.fetchall()
+	return render_template("verVacunas.html", vacunas=vacunas)
+
+
 
 
 

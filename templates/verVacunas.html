@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Agregar Vacuna</title>
+    <title>VACUNAS</title>
             <!-- #JS -->
     <!-- <script src="https://code.highcharts.com/highcharts.js"></script>  -->
 
@@ -16,28 +15,26 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 
-
    {% include "menu.html" ignore missing %}
 
 </head>
 <body>
-  <form  method="POST" action="{{url_for('addVacuna')}}"  name="form" data-target="#form">
-     
+  <form action="{{url_for('vacunas')}}" method="POST">
       <div class="container-fluid"> <!-- 1-->
       <fieldset>
            <div  class="col-sm-12 my-auto"  style="width: 60%; margin:0 auto;"> <!-- 2-->
                     <div class="card"> <!-- 3-->
                         <div class="card-header">
-                            Listado Pacientes
+                            Listado Vacunas
                         </div>
                         <div class="card-body">
                             <table class="blueTable">
                                 <thead>
                                   <tr>
-                                    <th id="NOMBRE_PACIENTE" name="NOMBRE_PACIENTE" >Nombre</th>
-                                    <th id="RUT_PACIENTE" name="RUT_PACIENTE">Rut</th>
-                                    <th id="FECHA_NACIMIENTO" name="FECHA_NACIMIENTO">Fecha Nacimiento</th>
-                                    <th>Vacunas</th>
+                                    <th>Enfermedad</th>
+                                    <th>Fecha Registro</th>
+                    
+                                    <th>Pacientes</th>
                                   </tr>
                                 </thead>
 
@@ -50,16 +47,15 @@
                                   </tfoot>
                                 <tbody>
                                 
-                                  {% for paciente in pacientes %}  
+                                  {% for vacuna in vacunas %}  
                                   <tr>     
-                                    <td >{{paciente['RUT']}}</td>
-                                    <td>{{ paciente['NOMBRE']}}</td>
-                                    <td>{{ paciente['FECHA_NACIMIENTO']}}</td>
+                                    <td >{{vacuna['NOMBRE_ENFERMEDAD']}}</td>
+                                    <td>{{ vacuna['FECHA_CREACION']}}</td>
+                                    
                                     <td>
                                        <div class="btn-group" role="group" aria-label="Basic example">   
-                                          <button class="btn btn-primary" value="{{paciente['RUT']}}" id="rut" name="rut"  type="submit" >Agregar</button>
-
-                                           <button class="btn btn-primary" type="button" onclick="window.location.href='{{ url_for( 'pacientesVacunas' , rut=paciente['RUT'] )}}';">Ver</button>
+                              
+                                          <button class="btn btn-primary" id="RUT" NAME="RUT" value="{{vacuna['NOMBRE_ENFERMEDAD']}}" type="submit">Ver</button>      
                                        </div>
                                     </td>
                                   </tr>
