@@ -28,22 +28,75 @@ def inicio():
 	return render_template("inicio.html",pacientes=paciente)
 
 
-@app.route('/addVacuna',methods=['POST']) #Listado de vacunas
+
+
+
+@app.route('/paciente/add',methods=["GET","POST"]) #Agregar pacientes desde planilla hacia la BD
+def nuevopaciente():
+	if request.method=="GET":
+		return render_template("nuevopaciente.html")
+
+	if request.method=="POST":
+		try:
+			datos=request.form
+			rut=datos['RUT']
+			nombre=datos['NOMBRE']
+			fechan=datos['FECHAN_NACIMIENTO']
+			cursor_insertar = mysql.get_db().cursor()
+			sql="INSERT INTO PACIENTE(RUT,NOMBRE,FECHA_NACIMIENTO) VALUES(%s,%s,%s)"
+			cursor_insertar.execute(sql,(rut,nombre,fechan))
+			mensaje="Su registró se guardó correctamente"
+			return render_template("addDatos.html", e=mensaje)
+		
+		except Exception as e:
+			mensaje2="No fue posible guardar su registro"
+			return render_template("addDatos.html",e = mensaje2)
+
+
+
+
+@app.route('/vacunas/add', methods=["POST","GET"])#Agregar nueva vacuna
+def nuevavacuna():
+	if request.method=="GET":
+		return render_template("nuevavacuna.html") #Muestra el formulario a rellenar
+
+	if request.method=="POST": #guardala nueva vacuna en la BD
+		try:
+			datos=request.form 
+			nombre=datos['NOMBRE_ENFERMEDAD']	
+			fecha=times.now()
+			cursor_insertar = mysql.get_db().cursor()
+			sql="INSERT INTO VACUNA(NOMBRE_ENFERMEDAD,FECHA_CREACION) VALUES(%s,%s)"
+			cursor_insertar.execute(sql,(nombre,fecha))
+			mensaje="Su registró se guardó correctamente"
+			return render_template("addDatos.html", e=mensaje)
+			
+		except Exception as e:
+			mensaje2="No fue posible guardar su registro"
+			return render_template("addDatos.html",e = mensaje2)
+		
+
+
+
+
+
+@app.route('/addVacuna',methods=['POST']) #Envía el formulario para el paciente seleccionado desde inicio
 def addVacuna():
-	rut=request.form['rut']
-	cursor_paciente = mysql.get_db().cursor()
-	sql="SELECT * FROM paciente WHERE RUT = %s"
-	cursor_paciente.execute(sql,rut)
-	paciente=cursor_paciente.fetchall()	
+	if request.method=="POST":
+		rut=request.form['rut']
+		cursor_paciente = mysql.get_db().cursor()
+		sql="SELECT * FROM paciente WHERE RUT = %s"
+		cursor_paciente.execute(sql,rut)
+		paciente=cursor_paciente.fetchall()	
 
-	cursor_vacuna = mysql.get_db().cursor()
-	cursor_vacuna.execute("SELECT * FROM vacuna") #Muestra los pacientes desde la BD
-	vacuna=cursor_vacuna.fetchall()
-	return render_template("addVacuna.html",pacientes=paciente,vacunas=vacuna)
-	
+		cursor_vacuna = mysql.get_db().cursor()
+		cursor_vacuna.execute("SELECT * FROM vacuna") #Muestra los pacientes desde la BD
+		vacuna=cursor_vacuna.fetchall()
+		return render_template("addVacuna.html",pacientes=paciente,vacunas=vacuna)
+		
 
 
-@app.route('/addDatosVacuna', methods=['POST']) #Listado de vacunas
+@app.route('/addDatosVacuna', methods=['POST']) #Guardar datos vacunación a paciente
 def addDatosVacuna():
 	if request.method=='POST':
 		try:
@@ -55,18 +108,18 @@ def addDatosVacuna():
 			sql="INSERT INTO PACIENTE_RECIBE_VACUNA(RUT,NOMBRE_ENFERMEDAD,FECHA_VACUNACION) VALUES(%s,%s,%s)"
 			cursor_insertar.execute(sql,(rut,vacuna,fecha))
 			mensaje="Su registró se guardó correctamente"
-			return render_template("addDatosVacuna.html",e = mensaje)
+			return render_template("addDatos.html",e = mensaje)
 
 		except Exception as e:
 			mensaje2="No fue posible guardar su registro"
-			return render_template("addDatosVacuna.html",e = mensaje2)
+			return render_template("addDatos.html",e = mensaje2)
 
 		
 	
 
-@app.route('/paciente/vacunas', methods=['POST','GET']) 
+@app.route('/paciente/vacunas', methods=['GET']) 
 def pacientesVacunas():
-	if request.method=='GET':
+	if request.method=='GET': #envía los datos para ver las vacunas que ha recibido el paciente
 		rut=request.args.get('rut',default=None, type=None)
 		cursor= mysql.get_db().cursor()
 		sql="SELECT * FROM PACIENTE_RECIBE_VACUNA WHERE RUT = %s"
@@ -77,16 +130,15 @@ def pacientesVacunas():
 		sql_paciente="SELECT * FROM PACIENTE WHERE RUT = %s"
 		cursor_paciente.execute(sql_paciente,rut)
 		paciente=cursor_paciente.fetchall()
-
-
-
 		return render_template('pacientesVacunas.html',pacientes=paciente,vacunas=vacunas)
 
 
 
 
 
-@app.route('/vacunas',methods=["POST","GET"])#Listado de las vacunas existentes
+
+
+@app.route('/vacunas',methods=["GET"])#Listado de las vacunas existentes
 def vacunas():
 	cursor = mysql.get_db().cursor()
 	cursor.execute("SELECT * FROM vacuna") #Muestra las vacunas desde la BD
@@ -95,7 +147,7 @@ def vacunas():
 
 
 
-@app.route('/pacientesPorVacunas',methods=["POST","GET"])#Listado pacientes por vacunas
+@app.route('/pacientesPorVacunas',methods=["POST"])#Listado pacientes por vacunas
 def pacientesPorVacunas():
 	if request.method=="POST":	
 		id_vacuna=request.form['NOMBRE_ENFERMEDAD']
