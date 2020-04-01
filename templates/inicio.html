@@ -1,0 +1,89 @@
+<!--- 
+INTEGRANTES: NATALIA SEPÚLVEDA - NELSON VÁSQUEZ
+INGENIERÍA CIVIL EN INFORMÁTICA UBB 2020
+-->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Agregar Vacuna</title>
+            <!-- #JS -->
+    <!-- <script src="https://code.highcharts.com/highcharts.js"></script>  -->
+
+    <script type="text/javascript" src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/jquery-3.4.1.min.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/bootstrap.js')}}"></script>
+            <!-- #CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+
+   {% include "menu.html" ignore missing %}
+
+</head>
+<body>
+  <form  method="POST" action="{{url_for('addVacuna')}}"  name="form" data-target="#form">
+     
+      <div class="container-fluid"> <!-- 1-->
+      <fieldset>
+           <div  class="col-sm-12 my-auto"  style="width: 60%; margin:0 auto;"> <!-- 2-->
+                    <div class="card"> <!-- 3-->
+                        <div class="card-header">
+                            Listado Pacientes
+                        </div>
+                        <div class="card-body">
+                            <table class="blueTable">
+                                <thead>
+                                  <tr>
+                                    <th id="NOMBRE_PACIENTE" name="NOMBRE_PACIENTE" >Nombre</th>
+                                    <th id="RUT_PACIENTE" name="RUT_PACIENTE">Rut</th>
+                                    <th id="FECHA_NACIMIENTO" name="FECHA_NACIMIENTO">Fecha Nacimiento</th>
+                                    <th>Vacunas</th>
+                                  </tr>
+                                </thead>
+
+                                <tfoot>
+                                  <tr>
+                                    <td colspan="4">
+                                      <div class="links"><a href="#">&laquo;</a> <a class="active" href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a> <a href="#">&raquo;</a></div>
+                                    </td>
+                                  </tr>
+                                  </tfoot>
+                                <tbody>
+                                
+                                  {% for paciente in pacientes %}  
+                                  <tr>     
+                                    <td>{{ paciente['NOMBRE']}}</td>
+                                    <td >{{paciente['RUT']}}</td>
+                                    <td>{{ paciente['FECHA_NACIMIENTO']}}</td>
+                                    <td>
+
+                                       <div class="btn-group row" style="width: 100%">
+                                          <div class="col-sm-8">
+                                            <button class="btn btn-outline-primary btn-block" value="{{paciente['RUT']}}" id="rut" name="rut"  type="submit" >Agregar</button>
+                                          </div>
+                                           <div class="col-sm-4">
+                                            <button  class="btn btn-outline-success" type="button" onclick="window.location.href='{{ url_for( 'pacientesVacunas' , rut=paciente['RUT'] )}}';">Ver</button>
+                                          </div>
+                                       </div>
+                                    </td>
+                                  </tr>
+                                  {% endfor %}
+                                </tbody>
+                                </table>           
+                        </div>
+                        
+                  
+          </div> <!-- 3-->
+
+            
+                
+     </div> <!-- 2-->
+    </div> <!-- 1-->
+    </fieldset>
+</form>
+</body>
+
+</html>

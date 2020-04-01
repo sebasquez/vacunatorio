@@ -1,0 +1,102 @@
+<!--- 
+INTEGRANTES: NATALIA SEPÚLVEDA - NELSON VÁSQUEZ
+INGENIERÍA CIVIL EN INFORMÁTICA UBB 2020
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Agregar Vacuna</title>
+            <!-- #JS -->
+    <!-- <script src="https://code.highcharts.com/highcharts.js"></script>  -->
+
+    <script type="text/javascript" src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/jquery-3.4.1.min.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='js/bootstrap.js')}}"></script>
+            <!-- #CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+   {% include "menu.html" ignore missing %}
+
+</head>
+<body>
+    <form action="{{ url_for('addDatosVacuna') }}" method = "POST">
+      <div class="container-fluid"> <!-- 1-->
+    
+           <div  class="col-sm-12 my-auto"  style="width: 60%; margin:0 auto;"> <!-- 2-->
+                    <div class="card"> <!-- 3-->
+                        <div class="card-header">
+                            Vacunar a paciente
+                        </div>
+                    <fieldset>
+                        <div class="card-body">
+                            
+                            <!-- DATOS PACIENTE-->
+
+                              
+                           {% for paciente in pacientes %} 
+                            
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                    <label for="colours">Rut Paciente</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <input class="form-control" type="text" placeholder="{{paciente['RUT']}}" id="RUT" name="RUT" value="{{paciente['RUT']}}" readonly>
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                    <label for="colours">Nombre Paciente</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <input class="form-control" type="text" placeholder="{{paciente['NOMBRE']}}" readonly>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                    <label for="colours">Fecha Nacimiento</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <input class="form-control" type="text" placeholder="{{paciente['FECHA_NACIMIENTO']}}" readonly>
+                                </div>
+                            </div>
+                            
+                            
+                            {% endfor %}                            
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                    <label for="colours">Vacuna</label>
+                                </div>
+                                <div class="col-sm-6">
+                                    <select class="form-control" id="NOMBRE_ENFERMEDAD" name="NOMBRE_ENFERMEDAD" required>
+                                        {% for vacuna in vacunas %}
+                                        <option value="{{ vacuna['NOMBRE_ENFERMEDAD']}}">{{ vacuna['NOMBRE_ENFERMEDAD']}}</option> 
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary" style=" margin:0 auto;" type="submit">Guardar</button>
+                        </div>
+                        
+                    </fieldset>
+                
+          </div> <!-- 3-->
+
+            
+                
+     </div> <!-- 2-->
+    </div> <!-- 1-->
+
+    </form>
+</body>
+
+</html>
