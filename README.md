@@ -10,6 +10,8 @@ Instalación:
 	Descargar el repositorio con la app: https://github.com/sebasquez/vacunatorio
 	Ejecutar el SQL vacunas.sql en Heidi (archivo se encuentra en vacunatorio/) para crear y poblar la base de datos
 	Ejecutar en cmder pip install -r requeriments.txt para descargar los paquetes necesarios para que funcione la app
+	Si el usuario de la base de datos tiene clave, descomentar la línea 18 en vacunas.py : app.config['MYSQL_DATABASE_PASSWORD'] = 'pass'
+	colocando la password correspondiente
 	Ejecutar en cmder vacunas.py desde la carpeta en que se guardó la app para montar en localhost la aplicación
 
 

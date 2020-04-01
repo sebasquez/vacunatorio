@@ -4,16 +4,21 @@
 import requests
 import json
 import times
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request,flash,url_for
 from flaskext.mysql import MySQL
 import pymysql
 import pymysql.cursors
+from itertools import cycle
 
 #pip install -r requeriments.txt
+
 app = Flask(__name__)
 app.config["MYSQL_DATABASE_USER"] = "root"    #Usuario de la BD
 app.config["MYSQL_DATABASE_DB"]  = "vacunatorio" #Nombre de mi base de datos para conectarme
-app.config['MYSQL_DATABASE_PASSWORD'] = '1508' #la clave de mi usuario, en vacunas.sql está mi código de la bd
+#app.config['MYSQL_DATABASE_PASSWORD'] = 'pass' #clave de usuario de la bd, si no tiene eliminar
+app.secret_key = 'python'
+app.config['SESSION_TYPE'] = 'filesystem'
+
 mysql = MySQL(app)
 
 mysql.connect_args["autocommit"] = True #Guardar cambios en la BD de forma automatica
@@ -35,22 +40,44 @@ def inicio():
 def nuevopaciente():
 	if request.method=="GET":
 		return render_template("nuevopaciente.html")
-
 	if request.method=="POST":
-		try:
+		try:		
 			datos=request.form
 			rut=datos['RUT']
-			nombre=datos['NOMBRE']
+			validar=validarRut(rut)
+			nombre=datos['NOMBRE'].upper()
 			fechan=datos['FECHAN_NACIMIENTO']
-			cursor_insertar = mysql.get_db().cursor()
-			sql="INSERT INTO PACIENTE(RUT,NOMBRE,FECHA_NACIMIENTO) VALUES(%s,%s,%s)"
-			cursor_insertar.execute(sql,(rut,nombre,fechan))
-			mensaje="Su registró se guardó correctamente"
-			return render_template("addDatos.html", e=mensaje)
-		
+			if validar==False:
+				flash("Error: El Rut ingresado no es correcto")
+				return render_template("nuevopaciente.html")
+			else:
+				cursor_insertar = mysql.get_db().cursor()
+				sql="INSERT INTO PACIENTE(RUT,NOMBRE,FECHA_NACIMIENTO) VALUES(%s,%s,%s)"
+				cursor_insertar.execute(sql,(rut,nombre,fechan))
+				mensaje="Su registró se guardó correctamente"
+				return render_template("addDatos.html", e=mensaje)
+			
 		except Exception as e:
-			mensaje2="No fue posible guardar su registro"
-			return render_template("addDatos.html",e = mensaje2)
+			flash("Error: Este Rut ya tiene un paciente asociado")
+			return render_template("nuevopaciente.html")
+
+
+def validarRut(rut):
+	rut = rut.upper();
+	rut = rut.replace("-","")
+	rut = rut.replace(".","")
+	aux = rut[:-1]
+	dv = rut[-1:]
+	revertido = map(int, reversed(str(aux)))
+	factors = cycle(range(2,8))
+	s = sum(d * f for d, f in zip(revertido,factors))
+	res = (-s)%11
+	if str(res) == dv:
+		return True
+	elif dv=="K" and res==10:
+		return True
+	else:
+		return False
 
 
 
@@ -63,7 +90,7 @@ def nuevavacuna():
 	if request.method=="POST": #guardala nueva vacuna en la BD
 		try:
 			datos=request.form 
-			nombre=datos['NOMBRE_ENFERMEDAD']	
+			nombre=datos['NOMBRE_ENFERMEDAD'].upper()	
 			fecha=times.now()
 			cursor_insertar = mysql.get_db().cursor()
 			sql="INSERT INTO VACUNA(NOMBRE_ENFERMEDAD,FECHA_CREACION) VALUES(%s,%s)"
@@ -72,8 +99,8 @@ def nuevavacuna():
 			return render_template("addDatos.html", e=mensaje)
 			
 		except Exception as e:
-			mensaje2="No fue posible guardar su registro"
-			return render_template("addDatos.html",e = mensaje2)
+			flash("Error: Esta vacuna ya existe")
+			return render_template("nuevavacuna.html") 
 		
 
 
@@ -102,7 +129,7 @@ def addDatosVacuna():
 		try:
 			datos=request.form
 			rut=datos['RUT']
-			vacuna=datos['NOMBRE_ENFERMEDAD']
+			vacuna=datos['NOMBRE_ENFERMEDAD'].upper()
 			fecha=times.now()	
 			cursor_insertar = mysql.get_db().cursor()
 			sql="INSERT INTO PACIENTE_RECIBE_VACUNA(RUT,NOMBRE_ENFERMEDAD,FECHA_VACUNACION) VALUES(%s,%s,%s)"
@@ -134,10 +161,6 @@ def pacientesVacunas():
 
 
 
-
-
-
-
 @app.route('/vacunas',methods=["GET"])#Listado de las vacunas existentes
 def vacunas():
 	cursor = mysql.get_db().cursor()
@@ -164,6 +187,10 @@ def pacientesPorVacunas():
 
 if __name__ == "__main__":
 	app.run(debug=True)
+
+
+
+
 
 
 

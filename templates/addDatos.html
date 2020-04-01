@@ -27,20 +27,17 @@ INGENIERÍA CIVIL EN INFORMÁTICA UBB 2020
   <form action="{{url_for('addVacuna')}}" method="POST">
       <div class="container-fluid"> <!-- 1-->
       <fieldset>
-           <div  class="col-sm-12 my-auto"  style="width: 60%; margin:0 auto;"> <!-- 2-->
-                    <div class="card"> <!-- 3-->
-                        <div class="card-header">
-                            
-                        </div>
-                        <div class="card-body">
-                         	{{e}}
-                        </div>
+                    
+              <div class="alert alert-success alert-dismissible fade show" role="alert">
+                      <span>{{ e }}</span>
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+              </div>
                           
-          </div> <!-- 3-->
+      
 
             
-                
-     </div> <!-- 2-->
     </div> <!-- 1-->
     </fieldset>
 </form>

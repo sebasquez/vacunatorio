@@ -5,3 +5,4 @@ PyMySQL>=0.9.3
 Jinja2>=2.10.1
 cryptography>=2.8
 times>=0.7 
+more-itertools>=8.2.0 

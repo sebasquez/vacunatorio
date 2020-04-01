@@ -24,6 +24,18 @@ INGENIERÍA CIVIL EN INFORMÁTICA UBB 2020
 
 </head>
 <body>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <span>{{ message }}</span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
     <form action="{{ url_for('nuevavacuna') }}" method = "POST">
       <div class="container-fluid"> <!-- 1-->
     
@@ -45,7 +57,7 @@ INGENIERÍA CIVIL EN INFORMÁTICA UBB 2020
                                     <label for="colours">Nombre Enfermedad</label>
                                 </div>
                                 <div class="col-sm-6">
-                                    <input class="form-control" type="text" placeholder="" id="NOMBRE_ENFERMEDAD" name="NOMBRE_ENFERMEDAD" >
+                                    <input class="form-control" type="text" placeholder="" id="NOMBRE_ENFERMEDAD" name="NOMBRE_ENFERMEDAD" maxlength="30" required>
                                 </div>
                             </div>
          
